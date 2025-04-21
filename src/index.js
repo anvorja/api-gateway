@@ -6,9 +6,20 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-// Middleware
-app.use(cors());
+// CORS debe configurarse ANTES de registrar las rutas
+app.use(cors({
+  origin: ['http://localhost:3000', 'http://localhost:8080'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
+
+
+const webhookConfigRouter = require('./webhook-config')
+app.use('/api', webhookConfigRouter);
+
+
 
 // Configuración de servicios
 const SERVICES = {
